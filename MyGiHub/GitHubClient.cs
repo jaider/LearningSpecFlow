@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Net;
 using System.Net.Http;
 
@@ -27,6 +28,12 @@ namespace MyGiHub
             var contentTask = response.Content.ReadAsStringAsync();
             contentTask.Wait();
             return Newtonsoft.Json.JsonConvert.DeserializeObject<GitHubRepositories>(contentTask.Result);
+        }
+
+        public void Authenticate()
+        {
+            var username = ConfigurationManager.AppSettings["GitHubUsername"];
+            var password = ConfigurationManager.AppSettings["GitHubPassword"];
         }
     }
 }
