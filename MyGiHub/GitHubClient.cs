@@ -2,38 +2,57 @@
 using System.Configuration;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace MyGiHub
 {
     public class GitHubClient
     {
-        public HttpResponseMessage Search(string arg)
+        HttpClient _client;
+
+        public GitHubClient(bool useAuthentication = false)
         {
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-
-            var client = new HttpClient {
+            _client = new HttpClient {
                 BaseAddress = new Uri("https://api.github.com")
             };
+            _client.DefaultRequestHeaders.Add("User-Agent", "C# App");
 
-            client.DefaultRequestHeaders.Add("User-Agent", "C# App");
-
-            var task = client.GetAsync($"/search/repositories?q={arg}");
-
-            task.Wait();
-            return task.Result;
+            if (useAuthentication) {
+                var username = ConfigurationManager.AppSettings["GitHubUsername"];
+                var password = ConfigurationManager.AppSettings["GitHubPassword"];
+                if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password)) {
+                    var byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
+                    var parameter = System.Convert.ToBase64String(byteArray);
+                    _client.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue("Basic", parameter);
+                }
+                else {
+                    throw new Exception("Please setup GitHub credentials");
+                }
+            }
         }
 
-        public GitHubRepositories Convert(HttpResponseMessage response)
+        public HttpResponseMessage Search(string arg) => Get($"/search/repositories?q={arg}");
+
+        public HttpResponseMessage UserRepos() => Get("/user/repos");
+
+        public HttpResponseMessage TestAuth() => Get("/");
+
+        public T MapResult<T>(HttpResponseMessage response)
         {
             var contentTask = response.Content.ReadAsStringAsync();
             contentTask.Wait();
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<GitHubRepositories>(contentTask.Result);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(contentTask.Result);
         }
 
-        public void Authenticate()
+        //use path like: "/", or "/user/repos"
+        private HttpResponseMessage Get(string path)
         {
-            var username = ConfigurationManager.AppSettings["GitHubUsername"];
-            var password = ConfigurationManager.AppSettings["GitHubPassword"];
+            var task = _client.GetAsync(path);
+            task.Wait();
+            return task.Result;
         }
     }
 }

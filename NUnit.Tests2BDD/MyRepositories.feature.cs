@@ -75,7 +75,7 @@ namespace NUnit.Tests2BDD
 #line 4
   testRunner.When("I request a list of my repositories", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 5
-  testRunner.Then("The results should include a repository name \"swapi\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+  testRunner.Then("The results should include a repository name \"azure-quickstart-templates\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

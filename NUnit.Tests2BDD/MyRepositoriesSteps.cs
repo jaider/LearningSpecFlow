@@ -1,4 +1,8 @@
-﻿using System;
+﻿using MyGiHub;
+using NUnit.Framework;
+using System;
+using System.Linq;
+using System.Net.Http;
 using TechTalk.SpecFlow;
 
 namespace NUnit.Tests2BDD
@@ -6,22 +10,37 @@ namespace NUnit.Tests2BDD
     [Binding]
     public class GetMyRepositoriesSteps
     {
+        private GitHubClient client;
+        private HttpResponseMessage response;
+
         [Given(@"I am an authenticated user")]
         public void GivenIAmAnAuthenticatedUser()
         {
-            ScenarioContext.Current.Pending();
+            client = new GitHubClient(true);
+            var response = client.TestAuth();
+            if(response.StatusCode != System.Net.HttpStatusCode.OK) {
+                throw new Exception("Authentication didn't work!");
+            }
         }
         
         [When(@"I request a list of my repositories")]
         public void WhenIRequestAListOfMyRepositories()
         {
-            ScenarioContext.Current.Pending();
+            response = client.UserRepos();
+            if (response.StatusCode != System.Net.HttpStatusCode.OK) {
+                throw new Exception("Request Failed");
+            }
         }
         
         [Then(@"The results should include a repository name ""(.*)""")]
-        public void ThenTheResultsShouldIncludeARepositoryName(string p0)
+        public void ThenTheResultsShouldIncludeARepositoryName(string name)
         {
-            ScenarioContext.Current.Pending();
+            var result = client.MapResult<GitHubRepositories[]>(response);
+            var found = result.Any(repository => repository.name == name);
+            
+            if (!found) {
+                throw new Exception($"Expected to find a repository named '{name}' but didn't");
+            }
         }
     }
 }

@@ -35,8 +35,8 @@ namespace NUnit.Tests2BDD
         [Then(@"I expect at least (.*) result")]
         public void ThenIExpectAtLeastResult(int minTotal)
         {
-            var repositories = client.Convert(response);
-            Assert.GreaterOrEqual(repositories.total_count, minTotal, $"We expected at least {minTotal} results but found {repositories.total_count}");
+            var result = client.MapResult<GitHubSummary>(response);
+            Assert.GreaterOrEqual(result.total_count, minTotal, $"We expected at least {minTotal} results but found {result.total_count}");
         }
     }
 }
