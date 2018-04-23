@@ -36,11 +36,8 @@ namespace NUnit.Tests2BDD
         public void ThenTheResultsShouldIncludeARepositoryName(string name)
         {
             var result = client.MapResult<GitHubRepositories[]>(response);
-            var found = result.Any(repository => repository.name == name);
-            
-            if (!found) {
-                throw new Exception($"Expected to find a repository named '{name}' but didn't");
-            }
+            var array = result.Select(repository => repository.name).ToArray();
+            CollectionAssert.Contains(array, name, $"Expected to find a repository named '{name}' but didn't");
         }
     }
 }
