@@ -11,6 +11,9 @@ namespace MyGiHub
     {
         HttpClient _client;
 
+        string Username { get; } = ConfigurationManager.AppSettings["GitHubUsername"];
+        string Password { get; } = ConfigurationManager.AppSettings["GitHubPassword"];
+
         public GitHubClient(bool useAuthentication = false)
         {
             System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
@@ -20,10 +23,8 @@ namespace MyGiHub
             _client.DefaultRequestHeaders.Add("User-Agent", "C# App");
 
             if (useAuthentication) {
-                var username = ConfigurationManager.AppSettings["GitHubUsername"];
-                var password = ConfigurationManager.AppSettings["GitHubPassword"];
-                if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password)) {
-                    var byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
+                if (!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password)) {
+                    var byteArray = Encoding.ASCII.GetBytes($"{Username}:{Password}");
                     var parameter = System.Convert.ToBase64String(byteArray);
                     _client.DefaultRequestHeaders.Authorization =
                         new AuthenticationHeaderValue("Basic", parameter);
@@ -40,10 +41,30 @@ namespace MyGiHub
 
         public HttpResponseMessage TestAuth() => Get("/");
 
+        //https://developer.github.com/v3/activity/watching/#list-watchers
+        //https://developer.github.com/v3/repos/#list-your-repositories
+        public HttpResponseMessage GetWatchers(string repo) => Get($"/repos/{Username}/{repo}/subscribers");
+
         public HttpResponseMessage CreateRepo(string name)
         {
             var body = new StringContent("{\"name\": \"" + name + "\"}");
             var task = _client.PostAsync("/user/repos", body);
+            task.Wait();
+            return task.Result;
+        }
+
+        public HttpResponseMessage DeleteRepo(string name)
+        {
+            var task = _client.DeleteAsync($"/repos/{Username}/{name}");
+            task.Wait();
+            return task.Result;
+        }
+
+        public HttpResponseMessage WatchRepo(string repo)
+        {
+            var body = new StringContent("{\"subscribed\": true}");
+            var owner = this.Username;
+            var task = _client.PutAsync($"/repos/{owner}/{repo}/subscription", body);
             task.Wait();
             return task.Result;
         }

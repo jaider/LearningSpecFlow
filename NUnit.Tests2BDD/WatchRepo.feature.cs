@@ -18,20 +18,20 @@ namespace NUnit.Tests2BDD
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.3.2.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("I want to create a new repository")]
-    public partial class IWantToCreateANewRepositoryFeature
+    [NUnit.Framework.DescriptionAttribute("This is an important repository")]
+    public partial class ThisIsAnImportantRepositoryFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "CreateRepo.feature"
+#line 1 "WatchRepo.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "I want to create a new repository", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "This is an important repository", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -64,22 +64,20 @@ namespace NUnit.Tests2BDD
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("I need a new repository")]
-        public virtual void INeedANewRepository()
+        [NUnit.Framework.DescriptionAttribute("I want to know when something happens with this repository")]
+        public virtual void IWantToKnowWhenSomethingHappensWithThisRepository()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("I need a new repository", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("I want to know when something happens with this repository", ((string[])(null)));
 #line 2
  this.ScenarioSetup(scenarioInfo);
 #line 3
-  testRunner.Given("I am an authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("I am an authenticated user", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 4
-  testRunner.When("I Create the \"a1monkey\" repository", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("I have a repository called \"azure-quickstart-templates\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 5
-  testRunner.And("I request a list of my repositories", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.When("I watch the \"azure-quickstart-templates\" repository", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 6
-  testRunner.Then("The results should include a repository name \"a1monkey\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 7
-  testRunner.And("I delete the repository called \"a1monkey\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("The \"azure-quickstart-templates\" repository will list me as a watcher", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

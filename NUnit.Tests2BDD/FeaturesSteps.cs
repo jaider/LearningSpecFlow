@@ -54,18 +54,53 @@ namespace NUnit.Tests2BDD
         }
 
         [Then(@"The results should include a repository name ""(.*)""")]
-        public void ThenTheResultsShouldIncludeARepositoryName(string name)
+        public void ThenTheResultsShouldIncludeARepositoryName(string repoName)
         {
-            var result = client.MapResult<GitHubRepositories[]>(response);
+            var result = client.MapResult<GitHubRepository[]>(response);
             var array = result.Select(repository => repository.name).ToArray();
-            CollectionAssert.Contains(array, name, $"Expected to find a repository named '{name}' but didn't");
+            CollectionAssert.Contains(array, repoName, $"Expected to find a repository named '{repoName}' but didn't");
         }
 
         [When(@"I Create the ""(.*)"" repository")]
-        public void WhenICreateTheRepository(string name)
+        public void WhenICreateTheRepository(string repoName)
         {
-            var response = client.CreateRepo(name);
+            var response = client.CreateRepo(repoName);
             Assert.AreEqual(System.Net.HttpStatusCode.Created, response.StatusCode, "Request Failed");
         }
+
+        [Then(@"I delete the repository called ""(.*)""")]
+        public void ThenIDeleteTheRepositoryCalled(string repoName)
+        {
+            var response = client.DeleteRepo(repoName);
+            Assert.AreEqual(System.Net.HttpStatusCode.NoContent, response.StatusCode, "Request Failed");
+        }
+
+        [Given(@"I have a repository called ""(.*)""")]
+        public void GivenIHaveARepositoryCalled(string repoName)
+        {
+            response = client.UserRepos();
+
+            var result = client.MapResult<GitHubRepository[]>(response);
+            var array = result.Select(repository => repository.name).ToArray();
+            CollectionAssert.Contains(array, repoName, $"Expected to find a repository named '{repoName}' but didn't");
+        }
+
+        [When(@"I watch the ""(.*)"" repository")]
+        public void WhenIWatchTheRepository(string repoName)
+        {
+            response = client.WatchRepo(repoName);
+            Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode, "Request Failed");
+        }
+
+        [Then(@"The ""(.*)"" repository will list me as a watcher")]
+        public void ThenTheRepositoryWillListMeAsAWatcher(string repoName)
+        {
+            response = client.GetWatchers(repoName);
+            Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode, "Request Failed");
+            var result = client.MapResult<GitHubWatcher[]>(response);
+            var watchers = result.Select(w => w.login).ToArray();
+            CollectionAssert.Contains(watchers, "jaider", $"Expected to find me as watcher but didn't");
+        }
+
     }
 }

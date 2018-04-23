@@ -65,6 +65,11 @@
       <DependentUpon>Search.feature</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WatchRepo.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WatchRepo.feature</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -82,6 +87,10 @@
     <None Include="Search.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Search.feature.cs</LastGenOutput>
+    </None>
+    <None Include="WatchRepo.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WatchRepo.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
