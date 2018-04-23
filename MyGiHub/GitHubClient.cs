@@ -40,6 +40,14 @@ namespace MyGiHub
 
         public HttpResponseMessage TestAuth() => Get("/");
 
+        public HttpResponseMessage CreateRepo(string name)
+        {
+            var body = new StringContent("{\"name\": \"" + name + "\"}");
+            var task = _client.PostAsync("/user/repos", body);
+            task.Wait();
+            return task.Result;
+        }
+
         public T MapResult<T>(HttpResponseMessage response)
         {
             var contentTask = response.Content.ReadAsStringAsync();

@@ -48,22 +48,30 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreateRepo.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CreateRepo.feature</DependentUpon>
+    </Compile>
+    <Compile Include="FeaturesSteps.cs" />
     <Compile Include="MyRepositories.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MyRepositories.feature</DependentUpon>
     </Compile>
-    <Compile Include="MyRepositoriesSteps.cs" />
     <Compile Include="Search.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Search.feature</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchSteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="CreateRepo.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CreateRepo.feature.cs</LastGenOutput>
+    </None>
     <None Include="MyRepositories.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MyRepositories.feature.cs</LastGenOutput>
