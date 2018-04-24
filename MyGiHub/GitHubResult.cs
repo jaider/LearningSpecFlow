@@ -8,6 +8,8 @@
     public class GitHubRepository
     {
         public string name { get; set; }
+
+        public string full_name { get; set; }
     }
 
     public class GitHubSubscription

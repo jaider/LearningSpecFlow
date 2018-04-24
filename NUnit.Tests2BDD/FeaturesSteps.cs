@@ -4,6 +4,7 @@ using System;
 using System.Net.Http;
 using TechTalk.SpecFlow;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace NUnit.Tests2BDD
 {
@@ -12,6 +13,7 @@ namespace NUnit.Tests2BDD
     {
         private HttpResponseMessage response;
         private GitHubClient client;
+        private TableRows tableRows;
 
         [Given(@"I am an anoymous user")]
         public void GivenIAmAnAnoymousUser()
@@ -88,18 +90,50 @@ namespace NUnit.Tests2BDD
         [When(@"I watch the ""(.*)"" repository")]
         public void WhenIWatchTheRepository(string repoName)
         {
-            response = client.WatchRepo(repoName);
+            response = client.WatchRepo(client.Username, repoName);
             Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode, "Request Failed");
         }
 
         [Then(@"The ""(.*)"" repository will list me as a watcher")]
         public void ThenTheRepositoryWillListMeAsAWatcher(string repoName)
         {
-            response = client.GetWatchers(repoName);
+            response = client.GetWatchersByRepo(client.Username, repoName);
             Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode, "Request Failed");
             var result = client.MapResult<GitHubWatcher[]>(response);
             var watchers = result.Select(w => w.login).ToArray();
-            CollectionAssert.Contains(watchers, "jaider", $"Expected to find me as watcher but didn't");
+            CollectionAssert.Contains(watchers, client.Username, $"Expected to find me as watcher but didn't");
+        }
+
+        [Given(@"I have the following repositories:")]
+        public void GivenIHaveTheFollowingRepositories(Table table)
+        {
+            tableRows = table.Rows;
+            foreach (var row in tableRows) {
+                var response = client.GetRepo(row[0], row[1]);
+                response.EnsureSuccessStatusCode();
+            }
+        }
+
+        [When(@"I watch each repository")]
+        public void WhenIWatchEachRepository()
+        {
+            foreach (var row in tableRows) {
+                var response = client.WatchRepo(row[0], row[1]);
+                response.EnsureSuccessStatusCode();
+            }
+        }
+
+        [Then(@"My watch list will include those repositories")]
+        public void ThenMyWatchListWillIncludeThoseRepositories()
+        {
+            var response = client.GetWatchedRepoByUser(client.Username);
+            response.EnsureSuccessStatusCode();
+            var result = client.MapResult<GitHubRepository[]>(response);
+            var watchList = result.Select(w => w.full_name).ToArray();
+            foreach (var row in tableRows) {
+                var fullname = $"{row[0]}/{row[1]}";
+                CollectionAssert.Contains(watchList, fullname);
+            }
         }
 
     }

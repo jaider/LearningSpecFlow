@@ -11,7 +11,7 @@ namespace MyGiHub
     {
         HttpClient _client;
 
-        string Username { get; } = ConfigurationManager.AppSettings["GitHubUsername"];
+        public string Username { get; } = ConfigurationManager.AppSettings["GitHubUsername"];
         string Password { get; } = ConfigurationManager.AppSettings["GitHubPassword"];
 
         public GitHubClient(bool useAuthentication = false)
@@ -39,11 +39,15 @@ namespace MyGiHub
 
         public HttpResponseMessage UserRepos() => Get("/user/repos");
 
+        public HttpResponseMessage GetRepo(string owner, string repoName) => Get($"/repos/{owner}/{repoName}");
+
         public HttpResponseMessage TestAuth() => Get("/");
 
         //https://developer.github.com/v3/activity/watching/#list-watchers
         //https://developer.github.com/v3/repos/#list-your-repositories
-        public HttpResponseMessage GetWatchers(string repo) => Get($"/repos/{Username}/{repo}/subscribers");
+        public HttpResponseMessage GetWatchersByRepo(string owner, string repo) => Get($"/repos/{owner}/{repo}/subscribers");
+
+        public HttpResponseMessage GetWatchedRepoByUser(string username) => Get($"/users/{username}/subscriptions");
 
         public HttpResponseMessage CreateRepo(string name)
         {
@@ -60,10 +64,9 @@ namespace MyGiHub
             return task.Result;
         }
 
-        public HttpResponseMessage WatchRepo(string repo)
+        public HttpResponseMessage WatchRepo(string owner, string repo)
         {
             var body = new StringContent("{\"subscribed\": true}");
-            var owner = this.Username;
             var task = _client.PutAsync($"/repos/{owner}/{repo}/subscription", body);
             task.Wait();
             return task.Result;
@@ -76,10 +79,9 @@ namespace MyGiHub
             return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(contentTask.Result);
         }
 
-        //use path like: "/", or "/user/repos"
         private HttpResponseMessage Get(string path)
         {
-            var task = _client.GetAsync(path);
+            var task = _client.GetAsync(path + "?per_page=100");
             task.Wait();
             return task.Result;
         }
