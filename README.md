@@ -5,8 +5,12 @@ As C# Developer, I want something based on my programming language world. So, I 
 The course is wonderful and I was so happy to find the C# libraries to implemented this on my own.  
 
 # Recommended Links
-* LinkedIn Course: https://www.linkedin.com/learning/api-testing-and-validation/welcome
 * SpecFlow Tutorial: https://lnkd.in/gStZWus
+* LinkedIn Course: https://www.linkedin.com/learning/api-testing-and-validation/welcome
 * Cucumber: https://lnkd.in/gMsbGnD
 * GitHub Repository info: https://developer.github.com/v3/repos/
 * GitHub Watch info: https://developer.github.com/v3/activity/watching/
+
+# VS Extensions
+* SpecFlow for Visual Studio 2017: https://marketplace.visualstudio.com/items?itemName=TechTalkSpecFlowTeam.SpecFlowforVisualStudio2017
+* NUnit VS Templates: https://marketplace.visualstudio.com/items?itemName=NUnitDevelopers.NUnitTemplatesforVisualStudio
