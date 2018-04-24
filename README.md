@@ -5,6 +5,7 @@ As C# Developer, I want something based on my programming language world. So, I 
 The course is wonderful and I was so happy to find the C# libraries to implemented this on my own.  
 
 # Recommended Links
+* Feature, Scenario, Given-When-Then: https://github.com/cucumber/cucumber/wiki/Given-When-Then
 * SpecFlow Tutorial: https://lnkd.in/gStZWus
 * LinkedIn Course: https://www.linkedin.com/learning/api-testing-and-validation/welcome
 * Cucumber: https://lnkd.in/gMsbGnD
