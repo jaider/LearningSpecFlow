@@ -43,8 +43,6 @@ namespace MyGiHub
 
         public HttpResponseMessage TestAuth() => Get("/");
 
-        //https://developer.github.com/v3/activity/watching/#list-watchers
-        //https://developer.github.com/v3/repos/#list-your-repositories
         public HttpResponseMessage GetWatchersByRepo(string owner, string repo) => Get($"/repos/{owner}/{repo}/subscribers");
 
         public HttpResponseMessage GetWatchedRepoByUser(string username) => Get($"/users/{username}/subscriptions");
